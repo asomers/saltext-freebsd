@@ -4,8 +4,7 @@
 
 import pytest
 
-import salt.modules.freebsd_sysctl as freebsd_sysctl
-import salt.modules.systemd_service as systemd
+import saltext.freebsd.modules.freebsd_sysctl as freebsd_sysctl
 from salt.exceptions import CommandExecutionError
 from tests.support.helpers import dedent
 from tests.support.mock import MagicMock, mock_open, patch

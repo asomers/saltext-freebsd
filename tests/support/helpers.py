@@ -272,23 +272,6 @@ def flaky(caller=None, condition=True, attempts=4):
     return wrap
 
 
-def requires_sshd_server(caller):
-    """
-    Mark a test as requiring the tests SSH daemon running.
-
-    .. code-block:: python
-
-        class MyTestCase(TestCase):
-
-            @requiresSshdServer
-            def test_create_user(self):
-                pass
-    """
-    raise RuntimeError(
-        "Please replace @requires_sshd_server with @pytest.mark.requires_sshd_server"
-    )
-
-
 class RedirectStdStreams:
     """
     Temporarily redirect system output to file like objects.

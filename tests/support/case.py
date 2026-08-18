@@ -836,57 +836,6 @@ class SyndicCase(TestCase, SaltClientTestCaseMixin):
         return orig["minion"]
 
 
-@pytest.mark.requires_sshd_server
-class SSHCase(ShellCase):
-    """
-    Execute a command via salt-ssh
-    """
-
-    def _arg_str(self, function, arg):
-        return "{} {}".format(function, " ".join(arg))
-
-    # pylint: disable=arguments-differ
-    def run_function(
-        self, function, arg=(), timeout=180, wipe=True, raw=False, **kwargs
-    ):
-        """
-        We use a 180s timeout here, which some slower systems do end up needing
-        """
-        ret = self.run_ssh(
-            self._arg_str(function, arg), timeout=timeout, wipe=wipe, raw=raw, **kwargs
-        )
-        log.debug(
-            "SSHCase run_function executed %s with arg %s and kwargs %s",
-            function,
-            arg,
-            kwargs,
-        )
-        log.debug("SSHCase JSON return: %s", ret)
-
-        # Late import
-        import salt.utils.json
-
-        try:
-            return salt.utils.json.loads(ret)["localhost"]
-        except Exception:  # pylint: disable=broad-except
-            return ret
-
-    # pylint: enable=arguments-differ
-    def custom_roster(self, new_roster, data):
-        """
-        helper method to create a custom roster to use for a ssh test
-        """
-        roster = os.path.join(RUNTIME_VARS.TMP_CONF_DIR, "roster")
-
-        with salt.utils.files.fopen(roster, "r") as fp_:
-            conf = salt.utils.yaml.safe_load(fp_)
-
-        conf["localhost"].update(data)
-
-        with salt.utils.files.fopen(new_roster, "w") as fp_:
-            salt.utils.yaml.safe_dump(conf, fp_)
-
-
 class ClientCase(AdaptedConfigurationTestCaseMixin, TestCase):
     """
     A base class containing relevant options for starting the various Salt

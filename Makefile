@@ -43,14 +43,14 @@ changelog: dev ## Render changelog. Requires VERSION parameter.
 
 .PHONY: docs
 docs: dev ## Build docs
-	@$(VENV_SH) nox -e docs --extra-pythons=3.14 --python=3.14
+	@$(VENV_SH) nox -e docs --extra-pythons=3.12 --python=3.12
 
 .PHONY: docs-dev
 docs-dev: dev ## Build docs, serve them and refresh on changes
-	@$(VENV_SH) nox -e docs-dev --extra-pythons=3.14 --python=3.14
+	@$(VENV_SH) nox -e docs-dev --extra-pythons=3.12 --python=3.12
 
 ## Tests
 
 .PHONY: tests
 tests: dev ## Run tests
-	@$(VENV_SH) nox -e tests-3.10
+	@$(VENV_SH) nox -e tests-3.12

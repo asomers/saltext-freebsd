@@ -113,7 +113,7 @@ def _wrapper(orig, pre="", post="", err_=None, run_args=None, **kwargs):
 
     if "retcode" in res and res["retcode"] != 0:
         msg = " ".join([x for x in (res["stdout"], res["stderr"]) if x])
-        ret = 'Unable to run "{}" with run_args="{}". Error: {}'.format(cmd_str, run_args, msg)
+        ret = f'Unable to run "{cmd_str}" with run_args="{run_args}". Error: {msg}'
         log.error(ret)
     else:
         try:

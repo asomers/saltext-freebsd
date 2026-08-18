@@ -191,9 +191,7 @@ class MockFH:
         else:
             content_type = type(content)
             if self.binary_mode and content_type is not bytes:
-                raise TypeError(
-                    "a bytes-like object is required, not '{}'".format(content_type.__name__)
-                )
+                raise TypeError(f"a bytes-like object is required, not '{content_type.__name__}'")
             elif not self.binary_mode and content_type is not str:
                 raise TypeError(f"write() argument must be str, not {content_type.__name__}")
 

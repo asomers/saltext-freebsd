@@ -389,7 +389,7 @@ class LoaderModuleMockMixin(metaclass=_FixLoaderModuleMockMixinMroOrder):
 
     def setup_loader_modules(self):
         raise NotImplementedError(
-            "'{}.setup_loader_modules()' must be implemented".format(self.__class__.__name__)
+            f"'{self.__class__.__name__}.setup_loader_modules()' must be implemented"
         )
 
 
@@ -481,9 +481,7 @@ class SaltReturnAssertsMixin:
                     )
                 )
             except (AttributeError, IndexError):
-                raise AssertionError(
-                    "Failed to get result. Salt Returned:\n{}".format(pprint.pformat(ret))
-                )
+                raise AssertionError(f"Failed to get result. Salt Returned:\n{pprint.pformat(ret)}")
 
     def assertSaltFalseReturn(self, ret):
         try:

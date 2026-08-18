@@ -12,7 +12,7 @@ from tests.support.mock import MagicMock, mock_open, patch
 
 @pytest.fixture
 def configure_loader_modules():
-    return {freebsd_sysctl: {}, systemd: {}}
+    return {freebsd_sysctl: {}}
 
 
 def test_get():

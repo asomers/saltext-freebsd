@@ -9,7 +9,7 @@ from .copier import discover_project_name
 
 # Should follow the version used for relenv packages, see
 # https://github.com/saltstack/salt/blob/master/cicd/shared-gh-workflows-context.yml
-RECOMMENDED_PYVER = "3.14"
+RECOMMENDED_PYVER = "3.12"
 # For discovery of existing virtual environment, descending priority.
 VENV_DIRS = (
     ".venv",
@@ -75,7 +75,10 @@ def create_venv(project_root=".", directory=None):
                 raise RuntimeError(
                     f"No `python{RECOMMENDED_PYVER}` executable found in $PATH, exiting"
                 )
-        python("-m", "venv", VENV_DIRS[0], f"--prompt=saltext-{discover_project_name()}")
+        # Use --system-site-packages in order to get the globally installed
+        # maturin and markupsafe packages, which can't currently (2026-08-18)
+        # be installed with uv due to setuptools version conflicts.
+        python("-m", "venv", "--system-site-packages", VENV_DIRS[0], f"--prompt=saltext-{discover_project_name()}")
     return venv
 
 

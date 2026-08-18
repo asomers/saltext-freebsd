@@ -285,7 +285,19 @@ class LocalCommand(Command):
     _local: Local = field(kw_only=True, repr=False, default=local)
 
     def _which(self, exe):
-        return shutil.which(exe, path=self._local._env.get("PATH", ""))
+        # Don't use uv.  It doesn't work, because "uv pip install" ignores
+        # --system-site-packages and attempts to install salt into the venv.
+        # Salt depends on markupsafe, which can't install in the venv because a
+        # too-old setuptools version.  But setuptools must be that old because
+        # salt doesn't install with newer setuptools.  Instead of uv, use
+        # "python -m venv", which lets us use --system-site-packages, and
+        # install py312-markupsafe system-wide.  The FreeBSD ports repo
+        # includes a patch for the setuptools problem.  See
+        # https://github.com/astral-sh/uv/issues/4466
+        if exe == "uv":
+            raise CommandNotFound
+        else:
+            return shutil.which(exe, path=self._local._env.get("PATH", ""))
 
     def _get_env(self, overrides=None):
         base = self._local._env.copy()

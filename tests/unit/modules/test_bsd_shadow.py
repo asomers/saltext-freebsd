@@ -1,5 +1,5 @@
 """
-    :codeauthor: Alan Somers <asomers@gmail.com>
+:codeauthor: Alan Somers <asomers@gmail.com>
 """
 
 import re
@@ -7,7 +7,8 @@ import re
 import pytest
 
 from tests.support.mixins import LoaderModuleMockMixin
-from tests.support.mock import MagicMock, patch
+from tests.support.mock import MagicMock
+from tests.support.mock import patch
 from tests.support.unit import TestCase
 
 shadow = pytest.importorskip("saltext.freebsd.modules.bsd_shadow")

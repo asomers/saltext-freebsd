@@ -1,11 +1,12 @@
 """
-    :codeauthor: Rahul Handay <rahulha@saltstack.com>
+:codeauthor: Rahul Handay <rahulha@saltstack.com>
 """
 
 import pytest
 
 import saltext.freebsd.states.sysrc as sysrc
-from tests.support.mock import MagicMock, patch
+from tests.support.mock import MagicMock
+from tests.support.mock import patch
 
 
 @pytest.fixture

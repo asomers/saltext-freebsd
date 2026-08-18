@@ -113,17 +113,13 @@ def _wrapper(orig, pre="", post="", err_=None, run_args=None, **kwargs):
 
     if "retcode" in res and res["retcode"] != 0:
         msg = " ".join([x for x in (res["stdout"], res["stderr"]) if x])
-        ret = 'Unable to run "{}" with run_args="{}". Error: {}'.format(
-            cmd_str, run_args, msg
-        )
+        ret = 'Unable to run "{}" with run_args="{}". Error: {}'.format(cmd_str, run_args, msg)
         log.error(ret)
     else:
         try:
             ret = res["stdout"]
         except KeyError:
-            log.error(
-                "cmd.run_all did not return a dictionary with a key named 'stdout'"
-            )
+            log.error("cmd.run_all did not return a dictionary with a key named 'stdout'")
     return ret
 
 

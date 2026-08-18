@@ -78,7 +78,13 @@ def create_venv(project_root=".", directory=None):
         # Use --system-site-packages in order to get the globally installed
         # maturin and markupsafe packages, which can't currently (2026-08-18)
         # be installed with uv due to setuptools version conflicts.
-        python("-m", "venv", "--system-site-packages", VENV_DIRS[0], f"--prompt=saltext-{discover_project_name()}")
+        python(
+            "-m",
+            "venv",
+            "--system-site-packages",
+            VENV_DIRS[0],
+            f"--prompt=saltext-{discover_project_name()}",
+        )
     return venv
 
 

@@ -22,8 +22,7 @@ def __virtual__():
         return __virtualname__
     return (
         False,
-        "The freebsdjail execution module cannot be loaded: "
-        "only available on FreeBSD systems.",
+        "The freebsdjail execution module cannot be loaded: " "only available on FreeBSD systems.",
     )
 
 

@@ -90,7 +90,7 @@ def show(config_file=False):
             if any([line.startswith(f"{root}.") for root in roots]):
                 if value is not None:
                     ret[key] = "\n".join(value)
-                (key, firstvalue) = line.split("=", 1)
+                key, firstvalue = line.split("=", 1)
                 value = [firstvalue]
             elif value is not None:
                 value.append(f"{line}")

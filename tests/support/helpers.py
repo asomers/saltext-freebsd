@@ -1,12 +1,12 @@
 """
-    :copyright: Copyright 2013-2017 by the SaltStack Team, see AUTHORS for more details.
-    :license: Apache 2.0, see LICENSE for more details.
+:copyright: Copyright 2013-2017 by the SaltStack Team, see AUTHORS for more details.
+:license: Apache 2.0, see LICENSE for more details.
 
 
-    tests.support.helpers
-    ~~~~~~~~~~~~~~~~~~~~~
+tests.support.helpers
+~~~~~~~~~~~~~~~~~~~~~
 
-    Test support helpers
+Test support helpers
 """
 
 import asyncio
@@ -36,27 +36,27 @@ import types
 import attr
 import pytest
 import pytestskipmarkers.utils.platform
-import tornado.ioloop
-import tornado.web
-from pytestshellutils.exceptions import ProcessFailed
-from pytestshellutils.utils import ports
-from pytestshellutils.utils.processes import ProcessResult
-
+import salt.ext.tornado.ioloop
+import salt.ext.tornado.web
 import salt.utils.files
 import salt.utils.platform
 import salt.utils.pycrypto
 import salt.utils.stringutils
 import salt.utils.versions
+from pytestshellutils.exceptions import ProcessFailed
+from pytestshellutils.utils import ports
+from pytestshellutils.utils.processes import ProcessResult
+
 from tests.support.mock import patch
 from tests.support.runtests import RUNTIME_VARS
-from tests.support.unit import SkipTest, _id, skip
+from tests.support.unit import SkipTest
+from tests.support.unit import _id
+from tests.support.unit import skip
 
 log = logging.getLogger(__name__)
 
 PRE_PYTEST_SKIP_OR_NOT = "PRE_PYTEST_DONT_SKIP" not in os.environ
-PRE_PYTEST_SKIP_REASON = (
-    "PRE PYTEST - This test was skipped before running under pytest"
-)
+PRE_PYTEST_SKIP_REASON = "PRE PYTEST - This test was skipped before running under pytest"
 PRE_PYTEST_SKIP = pytest.mark.skip_on_env(
     "PRE_PYTEST_DONT_SKIP", present=False, reason=PRE_PYTEST_SKIP_REASON
 )
@@ -252,9 +252,7 @@ def flaky(caller=None, condition=True, attempts=4):
                 exc_info = sys.exc_info()
                 if isinstance(exc, SkipTest):
                     raise exc_info[0].with_traceback(exc_info[1], exc_info[2])
-                if not isinstance(exc, AssertionError) and log.isEnabledFor(
-                    logging.DEBUG
-                ):
+                if not isinstance(exc, AssertionError) and log.isEnabledFor(logging.DEBUG):
                     log.exception(exc, exc_info=exc_info)
                 if attempt >= attempts - 1:
                     # We won't try to run tearDown once the attempts are exhausted
@@ -483,9 +481,7 @@ class ForceImportErrorOn:
     def restore_import_function(self):
         self.patcher.stop()
 
-    def __fake_import__(
-        self, name, globals_=None, locals_=None, fromlist=None, level=None
-    ):
+    def __fake_import__(self, name, globals_=None, locals_=None, fromlist=None, level=None):
         if level is None:
             level = 0
         if fromlist is None:
@@ -644,9 +640,7 @@ def requires_network(only_local_network=False):
     return decorator
 
 
-def with_system_user(
-    username, on_existing="delete", delete=True, password=None, groups=None
-):
+def with_system_user(username, on_existing="delete", delete=True, password=None, groups=None):
     """
     Create and optionally destroy a system user to be used within a test
     case. The system user is created using the ``user`` salt module.
@@ -663,8 +657,7 @@ def with_system_user(
     """
     if on_existing not in ("nothing", "delete", "skip"):
         raise RuntimeError(
-            "The value of 'on_existing' can only be one of, "
-            "'nothing', 'delete' and 'skip'"
+            "The value of 'on_existing' can only be one of, " "'nothing', 'delete' and 'skip'"
         )
 
     if not isinstance(delete, bool):
@@ -688,24 +681,18 @@ def with_system_user(
 
                 if on_existing == "delete":
                     log.debug("Deleting the system user %r", username)
-                    delete_user = cls.run_function(
-                        "user.delete", [username, True, True]
-                    )
+                    delete_user = cls.run_function("user.delete", [username, True, True])
                     if not delete_user:
                         cls.skipTest(
                             "A user named {!r} already existed on the "
-                            "system and re-creating it was not possible".format(
-                                username
-                            )
+                            "system and re-creating it was not possible".format(username)
                         )
                     log.debug("Second time creating system user %r", username)
                     create_user = cls.run_function("user.add", [username], **kwargs)
                     if not create_user:
                         cls.skipTest(
                             "A user named {!r} already existed, was deleted "
-                            "as requested, but re-creating it was not possible".format(
-                                username
-                            )
+                            "as requested, but re-creating it was not possible".format(username)
                         )
             if not salt.utils.platform.is_windows() and password is not None:
                 if salt.utils.platform.is_darwin():
@@ -713,18 +700,14 @@ def with_system_user(
                 else:
                     hashed_password = salt.utils.pycrypto.gen_hash(password=password)
                 hashed_password = f"'{hashed_password}'"
-                add_pwd = cls.run_function(
-                    "shadow.set_password", [username, hashed_password]
-                )
+                add_pwd = cls.run_function("shadow.set_password", [username, hashed_password])
 
             failure = None
             try:
                 try:
                     return func(cls, username)
                 except Exception as exc:  # pylint: disable=W0703
-                    log.error(
-                        "Running %r raised an exception: %s", func, exc, exc_info=True
-                    )
+                    log.error("Running %r raised an exception: %s", func, exc, exc_info=True)
                     # Store the original exception details which will be raised
                     # a little further down the code
                     failure = sys.exc_info()
@@ -773,8 +756,7 @@ def with_system_group(group, on_existing="delete", delete=True):
     """
     if on_existing not in ("nothing", "delete", "skip"):
         raise RuntimeError(
-            "The value of 'on_existing' can only be one of, "
-            "'nothing', 'delete' and 'skip'"
+            "The value of 'on_existing' can only be one of, " "'nothing', 'delete' and 'skip'"
         )
 
     if not isinstance(delete, bool):
@@ -806,9 +788,7 @@ def with_system_group(group, on_existing="delete", delete=True):
                     if not create_group:
                         cls.skipTest(
                             "A group named {!r} already existed, was deleted "
-                            "as requested, but re-creating it was not possible".format(
-                                group
-                            )
+                            "as requested, but re-creating it was not possible".format(group)
                         )
 
             failure = None
@@ -816,9 +796,7 @@ def with_system_group(group, on_existing="delete", delete=True):
                 try:
                     return func(cls, group)
                 except Exception as exc:  # pylint: disable=W0703
-                    log.error(
-                        "Running %r raised an exception: %s", func, exc, exc_info=True
-                    )
+                    log.error("Running %r raised an exception: %s", func, exc, exc_info=True)
                     # Store the original exception details which will be raised
                     # a little further down the code
                     failure = sys.exc_info()
@@ -868,8 +846,7 @@ def with_system_user_and_group(username, group, on_existing="delete", delete=Tru
     """
     if on_existing not in ("nothing", "delete", "skip"):
         raise RuntimeError(
-            "The value of 'on_existing' can only be one of, "
-            "'nothing', 'delete' and 'skip'"
+            "The value of 'on_existing' can only be one of, " "'nothing', 'delete' and 'skip'"
         )
 
     if not isinstance(delete, bool):
@@ -892,24 +869,18 @@ def with_system_user_and_group(username, group, on_existing="delete", delete=Tru
 
                 if on_existing == "delete":
                     log.debug("Deleting the system user %r", username)
-                    delete_user = cls.run_function(
-                        "user.delete", [username, True, True]
-                    )
+                    delete_user = cls.run_function("user.delete", [username, True, True])
                     if not delete_user:
                         cls.skipTest(
                             "A user named {!r} already existed on the "
-                            "system and re-creating it was not possible".format(
-                                username
-                            )
+                            "system and re-creating it was not possible".format(username)
                         )
                     log.debug("Second time creating system user %r", username)
                     create_user = cls.run_function("user.add", [username])
                     if not create_user:
                         cls.skipTest(
                             "A user named {!r} already existed, was deleted "
-                            "as requested, but re-creating it was not possible".format(
-                                username
-                            )
+                            "as requested, but re-creating it was not possible".format(username)
                         )
             if not create_group:
                 log.debug("Failed to create system group")
@@ -930,9 +901,7 @@ def with_system_user_and_group(username, group, on_existing="delete", delete=Tru
                     if not create_group:
                         cls.skipTest(
                             "A group named {!r} already existed, was deleted "
-                            "as requested, but re-creating it was not possible".format(
-                                group
-                            )
+                            "as requested, but re-creating it was not possible".format(group)
                         )
 
             failure = None
@@ -940,17 +909,13 @@ def with_system_user_and_group(username, group, on_existing="delete", delete=Tru
                 try:
                     return func(cls, username, group)
                 except Exception as exc:  # pylint: disable=W0703
-                    log.error(
-                        "Running %r raised an exception: %s", func, exc, exc_info=True
-                    )
+                    log.error("Running %r raised an exception: %s", func, exc, exc_info=True)
                     # Store the original exception details which will be raised
                     # a little further down the code
                     failure = sys.exc_info()
             finally:
                 if delete:
-                    delete_user = cls.run_function(
-                        "user.delete", [username, True, True]
-                    )
+                    delete_user = cls.run_function("user.delete", [username, True, True])
                     delete_group = cls.run_function("group.delete", [group])
                     if not delete_user:
                         if failure is None:
@@ -1190,9 +1155,7 @@ def skip_if_not_root(func):
     if not sys.platform.startswith("win"):
         if os.getuid() != 0:
             func.__unittest_skip__ = True
-            func.__unittest_skip_why__ = (
-                "You must be logged in as root to run this test"
-            )
+            func.__unittest_skip_why__ = "You must be logged in as root to run this test"
     else:
         current_user = salt.utils.win_functions.get_current_user()
         if current_user != "SYSTEM":
@@ -1346,9 +1309,7 @@ def random_string(prefix, size=6, uppercase=True, lowercase=True, digits=True):
         str: The random string
     """
     if not any([uppercase, lowercase, digits]):
-        raise RuntimeError(
-            "At least one of 'uppercase', 'lowercase' or 'digits' needs to be true"
-        )
+        raise RuntimeError("At least one of 'uppercase', 'lowercase' or 'digits' needs to be true")
     choices = []
     if uppercase:
         choices.extend(string.ascii_uppercase)
@@ -1407,7 +1368,7 @@ class Webserver:
 
         self.port = port
         self.wait = wait
-        self.handler = handler if handler is not None else tornado.web.StaticFileHandler
+        self.handler = handler if handler is not None else salt.ext.tornado.web.StaticFileHandler
         self.web_root = None
         self.ssl_opts = ssl_opts
 
@@ -1415,14 +1376,14 @@ class Webserver:
         """
         Threading target which stands up the tornado application
         """
-        self.ioloop = tornado.ioloop.IOLoop()
+        self.ioloop = salt.ext.tornado.ioloop.IOLoop()
         asyncio.set_event_loop(self.ioloop.asyncio_loop)
-        if self.handler == tornado.web.StaticFileHandler:
-            self.application = tornado.web.Application(
+        if self.handler == salt.ext.tornado.web.StaticFileHandler:
+            self.application = salt.ext.tornado.web.Application(
                 [(r"/(.*)", self.handler, {"path": self.root})]
             )
         else:
-            self.application = tornado.web.Application([(r"/(.*)", self.handler)])
+            self.application = salt.ext.tornado.web.Application([(r"/(.*)", self.handler)])
         self.application.listen(self.port, ssl_options=self.ssl_opts)
         self.ioloop.start()
 
@@ -1444,15 +1405,11 @@ class Webserver:
         """
         if self.web_root is None:
             raise RuntimeError("Webserver instance has not been started")
-        err_msg = (
-            "invalid path, must be either a relative path or a path within {}".format(
-                self.root
-            )
+        err_msg = "invalid path, must be either a relative path or a path within {}".format(
+            self.root
         )
         try:
-            relpath = (
-                path if not os.path.isabs(path) else os.path.relpath(path, self.root)
-            )
+            relpath = path if not os.path.isabs(path) else os.path.relpath(path, self.root)
             if relpath.startswith(".." + os.sep):
                 raise ValueError(err_msg)
             return "/".join((self.web_root, relpath))
@@ -1466,9 +1423,7 @@ class Webserver:
         if self.port is None:
             self.port = ports.get_unused_localhost_port()
 
-        self.web_root = "http{}://127.0.0.1:{}".format(
-            "s" if self.ssl_opts else "", self.port
-        )
+        self.web_root = "http{}://127.0.0.1:{}".format("s" if self.ssl_opts else "", self.port)
 
         self.server_thread = threading.Thread(target=self.target)
         self.server_thread.daemon = True
@@ -1500,7 +1455,7 @@ class Webserver:
         self.stop()
 
 
-class SaveRequestsPostHandler(tornado.web.RequestHandler):
+class SaveRequestsPostHandler(salt.ext.tornado.web.RequestHandler):
     """
     Save all requests sent to the server.
     """
@@ -1520,7 +1475,7 @@ class SaveRequestsPostHandler(tornado.web.RequestHandler):
         raise NotImplementedError()
 
 
-class MirrorPostHandler(tornado.web.RequestHandler):
+class MirrorPostHandler(salt.ext.tornado.web.RequestHandler):
     """
     Mirror a POST body back to the client
     """
@@ -1663,9 +1618,7 @@ class VirtualEnv:
         return self.run(self.venv_python, "-m", "pip", "install", *args, **kwargs)
 
     def uninstall(self, *args, **kwargs):
-        return self.run(
-            self.venv_python, "-m", "pip", "uninstall", "-y", *args, **kwargs
-        )
+        return self.run(self.venv_python, "-m", "pip", "uninstall", "-y", *args, **kwargs)
 
     def run(self, *args, **kwargs):
         check = kwargs.pop("check", True)
@@ -1690,9 +1643,7 @@ class VirtualEnv:
             try:
                 proc.check_returncode()
             except subprocess.CalledProcessError:
-                raise ProcessFailed(
-                    "Command failed return code check", process_result=proc
-                )
+                raise ProcessFailed("Command failed return code check", process_result=proc)
         return ret
 
     @staticmethod
@@ -1733,9 +1684,7 @@ class VirtualEnv:
         if code_string.startswith("\n"):
             code_string = code_string[1:]
         code_string = textwrap.dedent(code_string).rstrip()
-        log.debug(
-            "Code to run passed to python:\n>>>>>>>>>>\n%s\n<<<<<<<<<<", code_string
-        )
+        log.debug("Code to run passed to python:\n>>>>>>>>>>\n%s\n<<<<<<<<<<", code_string)
         if python is None:
             python = str(self.venv_python)
         return self.run(python, "-c", code_string, **kwargs)
@@ -1906,9 +1855,7 @@ class Keys:
         self.priv_path = priv_path
 
     def generate(self):
-        subprocess.run(
-            ["ssh-keygen", "-q", "-N", "", "-f", str(self.priv_path)], check=True
-        )
+        subprocess.run(["ssh-keygen", "-q", "-N", "", "-f", str(self.priv_path)], check=True)
 
     @property
     def pub_path(self):
@@ -1937,6 +1884,4 @@ def system_python_version():
     else:
         binary = "/usr/bin/python3"
     proc = subprocess.run([binary, "--version"], capture_output=True, check=True)
-    return tuple(
-        int(_) for _ in proc.stdout.decode().split(" ", 1)[1].strip().split(".")
-    )
+    return tuple(int(_) for _ in proc.stdout.decode().split(" ", 1)[1].strip().split("."))

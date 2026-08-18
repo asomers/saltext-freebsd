@@ -25,8 +25,7 @@ def __virtual__():
         return __virtualname__
     return (
         False,
-        "The freebsdkmod execution module cannot be loaded: only available on FreeBSD"
-        " systems.",
+        "The freebsdkmod execution module cannot be loaded: only available on FreeBSD" " systems.",
     )
 
 

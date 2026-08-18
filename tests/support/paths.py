@@ -1,13 +1,13 @@
 """
-    :codeauthor: Pedro Algarvio (pedro@algarvio.me)
-    :copyright: Copyright 2017 by the SaltStack Team, see AUTHORS for more details.
-    :license: Apache 2.0, see LICENSE for more details.
+:codeauthor: Pedro Algarvio (pedro@algarvio.me)
+:copyright: Copyright 2017 by the SaltStack Team, see AUTHORS for more details.
+:license: Apache 2.0, see LICENSE for more details.
 
 
-    tests.support.paths
-    ~~~~~~~~~~~~~~~~~~~
+tests.support.paths
+~~~~~~~~~~~~~~~~~~~
 
-    Tests related paths
+Tests related paths
 """
 
 import logging
@@ -22,9 +22,7 @@ import salt.utils.path
 log = logging.getLogger(__name__)
 
 SALT_CODE_DIR = os.path.dirname(os.path.normpath(os.path.abspath(salt.__file__)))
-TESTS_DIR = os.path.dirname(
-    os.path.dirname(os.path.normpath(os.path.abspath(__file__)))
-)
+TESTS_DIR = os.path.dirname(os.path.dirname(os.path.normpath(os.path.abspath(__file__))))
 if TESTS_DIR.startswith("//"):
     # Have we been given an initial double forward slash? Ditch it!
     TESTS_DIR = TESTS_DIR[1:]

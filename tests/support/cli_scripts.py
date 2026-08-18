@@ -1,8 +1,8 @@
 """
-    tests.support.cli_scripts
-    ~~~~~~~~~~~~~~~~~~~~~~~~~
+tests.support.cli_scripts
+~~~~~~~~~~~~~~~~~~~~~~~~~
 
-    Code to generate Salt CLI scripts for test runs
+Code to generate Salt CLI scripts for test runs
 """
 
 import logging

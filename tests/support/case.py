@@ -1,13 +1,13 @@
 """
-    :codeauthor: Pedro Algarvio (pedro@algarvio.me)
+:codeauthor: Pedro Algarvio (pedro@algarvio.me)
 
 
-    ====================================
-    Custom Salt TestCase Implementations
-    ====================================
+====================================
+Custom Salt TestCase Implementations
+====================================
 
-    Custom reusable :class:`TestCase<python2:unittest.TestCase>`
-    implementations.
+Custom reusable :class:`TestCase<python2:unittest.TestCase>`
+implementations.
 """
 
 import errno
@@ -21,18 +21,17 @@ import sys
 import tempfile
 import textwrap
 import time
-from datetime import datetime, timedelta
+from datetime import datetime
+from datetime import timedelta
 
 import pytest
+import salt.utils.files
 from pytestshellutils.utils.processes import terminate_process
 
-import salt.utils.files
 from tests.support.cli_scripts import ScriptPathMixin
 from tests.support.helpers import RedirectStdStreams
-from tests.support.mixins import (  # pylint: disable=unused-import
-    AdaptedConfigurationTestCaseMixin,
-    SaltClientTestCaseMixin,
-)
+from tests.support.mixins import AdaptedConfigurationTestCaseMixin  # pylint: disable=unused-import
+from tests.support.mixins import SaltClientTestCaseMixin
 from tests.support.runtests import RUNTIME_VARS
 from tests.support.unit import TestCase
 
@@ -210,9 +209,7 @@ class ShellCase(TestCase, AdaptedConfigurationTestCaseMixin, ScriptPathMixin):
             ret["out"] = out
         finally:
             opts["output_file"].close()
-        log.debug(
-            "Result of run_run_plus for fun '%s' with arg '%s': %s", fun, opts_arg, ret
-        )
+        log.debug("Result of run_run_plus for fun '%s' with arg '%s': %s", fun, opts_arg, ret)
         return ret
 
     def run_key(self, arg_str, catch_stderr=False, with_retcode=False, config_dir=None):
@@ -439,9 +436,7 @@ class ShellCase(TestCase, AdaptedConfigurationTestCaseMixin, ScriptPathMixin):
             """
             log_func = log.debug
             if timed_out:
-                log.error(
-                    "run_script timed out after %d seconds (process killed)", timeout
-                )
+                log.error("run_script timed out after %d seconds (process killed)", timeout)
                 log_func = log.error
 
             if log_output is True or timed_out or (log_output is None and retcode != 0):
@@ -491,9 +486,7 @@ class ShellCase(TestCase, AdaptedConfigurationTestCaseMixin, ScriptPathMixin):
                         break
                 else:
                     terminate_process(process.pid, kill_children=True)
-                    return format_return(
-                        process.returncode, *process.communicate(), timed_out=True
-                    )
+                    return format_return(process.returncode, *process.communicate(), timed_out=True)
 
         tmp_file.seek(0)
 
@@ -579,9 +572,7 @@ class SPMCase(TestCase, AdaptedConfigurationTestCaseMixin):
     """
 
     def _spm_build_files(self, config):
-        self.formula_dir = os.path.join(
-            " ".join(config["file_roots"]["base"]), "formulas"
-        )
+        self.formula_dir = os.path.join(" ".join(config["file_roots"]["base"]), "formulas")
         self.formula_sls_dir = os.path.join(self.formula_dir, "apache")
         self.formula_sls = os.path.join(self.formula_sls_dir, "apache.sls")
         self.formula_file = os.path.join(self.formula_dir, "FORMULA")
@@ -591,20 +582,14 @@ class SPMCase(TestCase, AdaptedConfigurationTestCaseMixin):
             os.makedirs(f_dir)
 
         with salt.utils.files.fopen(self.formula_sls, "w") as fp:
-            fp.write(
-                textwrap.dedent(
-                    """\
+            fp.write(textwrap.dedent("""\
                      install-apache:
                        pkg.installed:
                          - name: apache2
-                     """
-                )
-            )
+                     """))
 
         with salt.utils.files.fopen(self.formula_file, "w") as fp:
-            fp.write(
-                textwrap.dedent(
-                    """\
+            fp.write(textwrap.dedent("""\
                      name: apache
                      os: RedHat, Debian, Ubuntu, Suse, FreeBSD
                      os_family: RedHat, Debian, Suse, FreeBSD
@@ -612,9 +597,7 @@ class SPMCase(TestCase, AdaptedConfigurationTestCaseMixin):
                      release: 2
                      summary: Formula for installing Apache
                      description: Formula for installing Apache
-                     """
-                )
-            )
+                     """))
 
     def _spm_config(self, assume_yes=True):
         self._tmp_spm = tempfile.mkdtemp()
@@ -664,16 +647,10 @@ class SPMCase(TestCase, AdaptedConfigurationTestCaseMixin):
         os.makedirs(repo_conf_dir)
 
         with salt.utils.files.fopen(os.path.join(repo_conf_dir, "spm.repo"), "w") as fp:
-            fp.write(
-                textwrap.dedent(
-                    """\
+            fp.write(textwrap.dedent("""\
                      local_repo:
                        url: file://{}
-                     """.format(
-                        self.config["spm_build_dir"]
-                    )
-                )
-            )
+                     """.format(self.config["spm_build_dir"])))
 
         u_repo = self.run_spm("update_repo", self.config)
 
@@ -702,9 +679,7 @@ class ModuleCase(TestCase, SaltClientTestCaseMixin):
         """
         for minion in minions:
             while True:
-                ret = self.run_function(
-                    "saltutil.running", minion_tgt=minion, timeout=300
-                )
+                ret = self.run_function("saltutil.running", minion_tgt=minion, timeout=300)
                 if ret:
                     log.debug("Waiting for minion's jobs: %s", minion)
                     time.sleep(sleep)
@@ -748,8 +723,7 @@ class ModuleCase(TestCase, SaltClientTestCaseMixin):
             kwargs["timeout"] = kwargs.pop("f_timeout")
         client = self.client if master_tgt is None else self.clients[master_tgt]
         log.debug(
-            "Running client.cmd(minion_tgt=%r, function=%r, arg=%r, timeout=%r,"
-            " kwarg=%r)",
+            "Running client.cmd(minion_tgt=%r, function=%r, arg=%r, timeout=%r," " kwarg=%r)",
             minion_tgt,
             function,
             arg,
@@ -807,9 +781,7 @@ class ModuleCase(TestCase, SaltClientTestCaseMixin):
                 job_kill = self.run_function("saltutil.kill_job", [jid])
                 msg = (
                     "A running state.single was found causing a state lock. "
-                    "Job details: '{}'  Killing Job Returned: '{}'".format(
-                        job_data, job_kill
-                    )
+                    "Job details: '{}'  Killing Job Returned: '{}'".format(job_data, job_kill)
                 )
                 ret.append(f"[TEST SUITE ENFORCED]{msg}[/TEST SUITE ENFORCED]")
         return ret

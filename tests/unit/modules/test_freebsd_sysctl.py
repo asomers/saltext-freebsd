@@ -1,13 +1,15 @@
 """
-    :codeauthor: asomers <asomers@gmail.com>
+:codeauthor: asomers <asomers@gmail.com>
 """
 
 import pytest
+from salt.exceptions import CommandExecutionError
 
 import saltext.freebsd.modules.freebsd_sysctl as freebsd_sysctl
-from salt.exceptions import CommandExecutionError
 from tests.support.helpers import dedent
-from tests.support.mock import MagicMock, mock_open, patch
+from tests.support.mock import MagicMock
+from tests.support.mock import mock_open
+from tests.support.mock import patch
 
 
 @pytest.fixture
@@ -153,9 +155,7 @@ def test_persist_updated_tunable():
     """
 
     with patch("salt.utils.files.fopen", mock_open()):
-        assert (
-            freebsd_sysctl.persist("vfs.usermount", 1, "/boot/loader.conf") == "Updated"
-        )
+        assert freebsd_sysctl.persist("vfs.usermount", 1, "/boot/loader.conf") == "Updated"
 
 
 def test_show():

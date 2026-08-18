@@ -1,22 +1,22 @@
 """
-    :codeauthor: Pedro Algarvio (pedro@algarvio.me)
+:codeauthor: Pedro Algarvio (pedro@algarvio.me)
 
 
-    ============================
-    Unittest Compatibility Layer
-    ============================
+============================
+Unittest Compatibility Layer
+============================
 
-    Compatibility layer to use :mod:`unittest <python2:unittest>` under Python
-    2.7 or `unittest2`_ under Python 2.6 without having to worry about which is
-    in use.
+Compatibility layer to use :mod:`unittest <python2:unittest>` under Python
+2.7 or `unittest2`_ under Python 2.6 without having to worry about which is
+in use.
 
-    .. attention::
+.. attention::
 
-        Please refer to Python's :mod:`unittest <python2:unittest>`
-        documentation as the ultimate source of information, this is just a
-        compatibility layer.
+    Please refer to Python's :mod:`unittest <python2:unittest>`
+    documentation as the ultimate source of information, this is just a
+    compatibility layer.
 
-    .. _`unittest2`: https://pypi.python.org/pypi/unittest2
+.. _`unittest2`: https://pypi.python.org/pypi/unittest2
 """
 
 # pylint: disable=unused-import,blacklisted-module,deprecated-method
@@ -34,8 +34,11 @@ from unittest import TestResult
 from unittest import TestSuite as _TestSuite
 from unittest import TextTestResult as _TextTestResult
 from unittest import TextTestRunner as _TextTestRunner
-from unittest import expectedFailure, skip, skipIf
-from unittest.case import SkipTest, _id
+from unittest import expectedFailure
+from unittest import skip
+from unittest import skipIf
+from unittest.case import SkipTest
+from unittest.case import _id
 from unittest.util import safe_repr
 
 try:
@@ -68,10 +71,7 @@ class TestSuite(_TestSuite):
     def _handleClassSetUp(self, test, result):
         previousClass = getattr(result, "_previousTestClass", None)
         currentClass = test.__class__
-        if (
-            currentClass == previousClass
-            or getattr(currentClass, "setUpClass", None) is None
-        ):
+        if currentClass == previousClass or getattr(currentClass, "setUpClass", None) is None:
             return super()._handleClassSetUp(test, result)
 
         # Store a reference to all class attributes before running the setUpClass method
@@ -91,9 +91,7 @@ class TestSuite(_TestSuite):
             return
         # See if the previous class attributes have been cleaned
         if previousClass and getattr(previousClass, "tearDownClass", None):
-            prerun_class_attributes = getattr(
-                previousClass, "_prerun_class_attributes", None
-            )
+            prerun_class_attributes = getattr(previousClass, "_prerun_class_attributes", None)
             if prerun_class_attributes is not None:
                 previousClass._prerun_class_attributes = None
                 del previousClass._prerun_class_attributes

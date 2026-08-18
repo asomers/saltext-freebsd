@@ -507,9 +507,7 @@ def status(name, sig=None, jail=None):
     results = {}
     for service in services:
         cmd = f"{_cmd(jail)} {service} onestatus"
-        results[service] = not __salt__["cmd.retcode"](
-            cmd, python_shell=False, ignore_retcode=True
-        )
+        results[service] = not __salt__["cmd.retcode"](cmd, python_shell=False, ignore_retcode=True)
     if contains_globbing:
         return results
     return results[name]

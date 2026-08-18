@@ -17,9 +17,16 @@ from nox.virtualenv import VirtualEnv
 nox.options.reuse_existing_virtualenvs = True
 #  Don't fail on missing interpreters
 nox.options.error_on_missing_interpreters = False
-# Speed up all sessions by using uv if possible
+# Don't use uv. It doesn't work, because uv pip install ignores
+# --system-site-packages and attempts to install salt into the venv.
+# Salt depends on markupsafe, which can't install in the venv because a
+# too-old setuptools version. But setuptools must be that old because
+# salt doesn't install with newer setuptools. Instead, use virtualenv with
+# --system-site-packages and install markupsafe system-wide. See
+# https://github.com/astral-sh/uv/issues/4466
 if tuple(map(int, metadata.version("nox").split("."))) >= (2024, 3):
-    nox.options.default_venv_backend = "uv|virtualenv"
+    nox.options.default_venv_backend = "virtualenv"
+VENV_PARAMS = ("--system-site-packages",)
 
 # Python versions to test against
 PYTHON_VERSIONS = ("3", "3.10", "3.11", "3.12", "3.13", "3.14")
@@ -99,8 +106,7 @@ def _install_requirements(
 
         if install_salt:
             # Salt does not publish wheels and setuptools 75.6.0+ breaks requirements inclusion during builds,
-            # so we need to constrain setuptools in the build environment. uv reads this from
-            # pyproject.toml, but pip has no equivalent behavior.
+            # so we need to constrain setuptools in the build environment.
             # We need delete=False for Windows. delete_on_close would work, but is Python 3.12+ only.
             with tempfile.NamedTemporaryFile(delete=False) as constraints_file:
                 setuptools_constraint = "setuptools<75.6.0"
@@ -137,7 +143,7 @@ def _install_requirements(
             session.install(pkg, silent=PIP_INSTALL_SILENT)
 
 
-@nox.session(python=PYTHON_VERSIONS)
+@nox.session(python=PYTHON_VERSIONS, venv_params=VENV_PARAMS)
 def tests(session):
     _install_requirements(session, install_source=True)
 
@@ -348,7 +354,7 @@ def _lint_pre_commit(session, rcfile, flags, paths):
     _lint(session, rcfile, flags, paths, tee_output=False)
 
 
-@nox.session(python="3")
+@nox.session(python="3", venv_params=VENV_PARAMS)
 def lint(session):
     """
     Run PyLint against the code and the test suite. Set PYLINT_REPORT to a path to capture output.
@@ -357,7 +363,7 @@ def lint(session):
     session.notify(f"lint-tests-{session.python}")
 
 
-@nox.session(python="3", name="lint-code")
+@nox.session(python="3", name="lint-code", venv_params=VENV_PARAMS)
 def lint_code(session):
     """
     Run PyLint against the code. Set PYLINT_REPORT to a path to capture output.
@@ -370,7 +376,7 @@ def lint_code(session):
     _lint(session, ".pylintrc", flags, paths)
 
 
-@nox.session(python="3", name="lint-tests")
+@nox.session(python="3", name="lint-tests", venv_params=VENV_PARAMS)
 def lint_tests(session):
     """
     Run PyLint against the test suite. Set PYLINT_REPORT to a path to capture output.
@@ -432,7 +438,7 @@ def _get_docs_env(session):
     return env
 
 
-@nox.session(python="3")
+@nox.session(python="3", venv_params=VENV_PARAMS)
 def docs(session):
     """
     Build Docs
@@ -459,7 +465,7 @@ def docs(session):
     os.chdir(str(REPO_ROOT))
 
 
-@nox.session(name="docs-dev", python="3")
+@nox.session(name="docs-dev", python="3", venv_params=VENV_PARAMS)
 def docs_dev(session):
     """
     Build and serve the Sphinx HTML documentation, with live reloading on file changes, via sphinx-autobuild.
@@ -493,7 +499,7 @@ def docs_dev(session):
     session.run("sphinx-autobuild", *args, env=env)
 
 
-@nox.session(name="docs-crosslink-info", python="3")
+@nox.session(name="docs-crosslink-info", python="3", venv_params=VENV_PARAMS)
 def docs_crosslink_info(session):
     """
     Report intersphinx cross links information

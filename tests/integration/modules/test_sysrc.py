@@ -4,6 +4,7 @@ from tests.support.case import ModuleCase
 
 pytestmark = [
     pytest.mark.skip_unless_on_freebsd,
+    pytest.mark.usefixtures("bridge_pytest_and_runtests"),
 ]
 
 

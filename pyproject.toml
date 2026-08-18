@@ -81,6 +81,7 @@ lint = [
     "pylint==4.0.4",
 ]
 tests = [
+    "mock",
     "pytest>=7.2.0",
     "pytest-salt-factories>=1.0.0",
     "pytest-instafail",

@@ -124,7 +124,7 @@ repos:
         require_serial: true
         additional_dependencies:
           - nox==2026.4.10
-          - uv==0.11.26  # Makes this hook much faster
+          - uv  # Makes this hook much faster
 
       - id: nox
         alias: lint-tests
@@ -135,7 +135,7 @@ repos:
         require_serial: true
         additional_dependencies:
           - nox==2026.4.10
-          - uv==0.11.26  # Makes this hook much faster
+          - uv  # Makes this hook much faster
 
   # Disable because actionlint-py attempts to install via binary blob, doesn't
   # have a precompiled blob for FreeBSD, and I can't be bothered to find a

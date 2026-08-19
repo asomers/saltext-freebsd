@@ -22,7 +22,7 @@ def __virtual__():
         return __virtualname__
     return (
         False,
-        "The freebsdjail execution module cannot be loaded: " "only available on FreeBSD systems.",
+        "The freebsdjail execution module cannot be loaded: only available on FreeBSD systems.",
     )
 
 
@@ -183,10 +183,7 @@ def fstab(jail):
     """
     ret = []
     config = show_config(jail)
-    if "fstab" in config:
-        c_fstab = config["fstab"]
-    elif "mount.fstab" in config:
-        c_fstab = config["mount.fstab"]
+    c_fstab = config.get("fstab", config.get("mount.fstab"))
     if "fstab" in config or "mount.fstab" in config:
         if os.access(c_fstab, os.R_OK):
             with salt.utils.files.fopen(c_fstab, "r") as _fp:

@@ -101,7 +101,7 @@ def _wrapper(orig, pre="", post="", err_=None, run_args=None, **kwargs):
     """
     ret = ""  # the message to be returned
     cmd = _cmd(**kwargs)
-    cmd_str = " ".join([x for x in (pre, cmd, post, orig)])
+    cmd_str = " ".join([pre, cmd, post, orig])
     if run_args and isinstance(run_args, dict):
         res = __salt__["cmd.run_all"](cmd_str, **run_args)
     else:
@@ -236,7 +236,7 @@ def ids(**kwargs):
     return _wrapper("IDS", **kwargs)
 
 
-def upgrade(**kwargs):
+def upgrade(**kwargs):  # pylint: disable=W0613
     """
     .. versionadded:: 2016.3.4
 

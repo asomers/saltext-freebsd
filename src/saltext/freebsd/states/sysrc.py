@@ -44,7 +44,7 @@ def managed(name, value, **kwargs):
     # Check the current state
     current_state = __salt__["sysrc.get"](name=name, **kwargs)
     if current_state is not None:
-        for rcname, rcdict in current_state.items():
+        for rcdict in current_state.values():
             if rcdict[name] == value:
                 ret["result"] = True
                 ret["comment"] = f"{name} is already set to the desired value."

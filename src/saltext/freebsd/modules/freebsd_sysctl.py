@@ -87,7 +87,7 @@ def show(config_file=False):
         out = __salt__["cmd.run"](cmd, output_loglevel="trace")
         value = None
         for line in out.splitlines():
-            if any([line.startswith(f"{root}.") for root in roots]):
+            if any([line.startswith(f"{root}.") for root in roots]):  # pylint: disable=R1729
                 if value is not None:
                     ret[key] = "\n".join(value)
                 key, firstvalue = line.split("=", 1)
@@ -156,25 +156,24 @@ def persist(name, value, config="/etc/sysctl.conf"):
             if not line.startswith(f"{name}="):
                 nlines.append(line)
                 continue
+            key, rest = line.split("=", 1)
+            if rest.startswith('"'):
+                _, rest_v, rest = rest.split('"', 2)
+            elif rest.startswith("'"):
+                _, rest_v, rest = rest.split("'", 2)
             else:
-                key, rest = line.split("=", 1)
-                if rest.startswith('"'):
-                    _, rest_v, rest = rest.split('"', 2)
-                elif rest.startswith("'"):
-                    _, rest_v, rest = rest.split("'", 2)
+                rest_v = rest.split()[0]
+                rest = rest[len(rest_v) :]
+            if rest_v == value:
+                # If it is correct in the config file, check in memory
+                if str(get(name)) != value:
+                    assign(name, value)
+                    return "Updated"
                 else:
-                    rest_v = rest.split()[0]
-                    rest = rest[len(rest_v) :]
-                if rest_v == value:
-                    # If it is correct in the config file, check in memory
-                    if str(get(name)) != value:
-                        assign(name, value)
-                        return "Updated"
-                    else:
-                        return "Already set"
-                new_line = _formatfor(key, value, config, rest)
-                nlines.append(new_line)
-                edited = True
+                    return "Already set"
+            new_line = _formatfor(key, value, config, rest)
+            nlines.append(new_line)
+            edited = True
     if not edited:
         nlines.append(f"{_formatfor(name, value, config)}\n")
     with salt.utils.files.fopen(config, "w+") as ofile:

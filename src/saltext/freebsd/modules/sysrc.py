@@ -18,7 +18,7 @@ def __virtual__():
         return True
     return (
         False,
-        "The sysrc execution module failed to load: the sysrc binary is not in the" " path.",
+        "The sysrc execution module failed to load: the sysrc binary is not in the path.",
     )
 
 
@@ -113,7 +113,6 @@ def set_(name, value, **kwargs):
     for sysrc in r["stdout"].split("\n"):
         rcfile = sysrc.split(": ")[0]
         var = sysrc.split(": ")[1]
-        oldval = sysrc.split(": ")[2].strip().split("->")[0]
         newval = sysrc.split(": ")[2].strip().split("->")[1]
         if rcfile not in ret:
             ret[rcfile] = {}
@@ -145,5 +144,4 @@ def remove(name, **kwargs):
     sysrcs = __salt__["cmd.run"](cmd)
     if "sysrc: unknown variable" in sysrcs:
         raise CommandExecutionError(sysrcs)
-    else:
-        return name + " removed"
+    return name + " removed"

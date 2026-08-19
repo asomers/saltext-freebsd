@@ -13,10 +13,10 @@ import logging
 import os
 import re
 
-import salt.utils.decorators as decorators
 import salt.utils.files
 import salt.utils.path
 from salt.exceptions import CommandNotFoundError
+from salt.utils import decorators
 
 __func_alias__ = {"reload_": "reload"}
 
@@ -75,7 +75,7 @@ def _get_jail_path(jail):
     jails = __salt__["cmd.run_stdout"](f"{jls} -n jid name path")
     for j in jails.splitlines():
         jid, jname, path = (x.split("=")[1].strip() for x in j.split())
-        if jid == jail or jname == jail:
+        if jail in (jid, jname):
             return path.rstrip("/")
     # XΧΧ, TODO, not sure how to handle nonexistent jail
     return ""

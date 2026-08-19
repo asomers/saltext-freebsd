@@ -39,7 +39,7 @@ def __virtual__():
         return __virtualname__
     return (
         False,
-        "The freebsdports execution module cannot be loaded: " "only available on FreeBSD systems.",
+        "The freebsdports execution module cannot be loaded: only available on FreeBSD systems.",
     )
 
 
@@ -107,7 +107,7 @@ def _write_options(name, configuration):
         try:
             os.makedirs(dirname)
         except OSError as exc:
-            raise CommandExecutionError(f"Unable to make {dirname}: {exc}")
+            raise CommandExecutionError(f"Unable to make {dirname}: {exc}") from exc
 
     with salt.utils.files.fopen(os.path.join(dirname, "options"), "w") as fp_:
         sorted_options = list(conf_ptr)
@@ -198,9 +198,7 @@ def deinstall(name):
     """
     portpath = _check_portname(name)
     old = __salt__["pkg.list_pkgs"]()
-    result = __salt__["cmd.run_all"](
-        ["make", "deinstall", "BATCH=yes"], cwd=portpath, python_shell=False
-    )
+    __salt__["cmd.run_all"](["make", "deinstall", "BATCH=yes"], cwd=portpath, python_shell=False)
     __context__.pop("pkg.list_pkgs", None)
     new = __salt__["pkg.list_pkgs"]()
     return salt.utils.data.compare_dicts(old, new)
@@ -284,7 +282,7 @@ def showconfig(name, default=False, dict_return=False):
     output = output[1:]
     for line in output:
         try:
-            opt, val, desc = re.match(r"\s+([^=]+)=(off|on): (.+)", line).groups()
+            opt, val, _desc = re.match(r"\s+([^=]+)=(off|on): (.+)", line).groups()
         except AttributeError:
             continue
         ret[pkg][opt] = val
@@ -313,7 +311,7 @@ def config(name, reset=False, **kwargs):
 
         salt '*' ports.config security/nmap IPV6=off
     """
-    portpath = _check_portname(name)
+    _check_portname(name)
 
     if reset:
         rmconfig(name)
@@ -327,7 +325,7 @@ def config(name, reset=False, **kwargs):
     pkg = next(iter(configuration))
     conf_ptr = configuration[pkg]
 
-    opts = {str(x): _normalize(kwargs[x]) for x in kwargs if not x.startswith("_")}
+    opts = {str(x): _normalize(y) for x, y in kwargs.items() if not x.startswith("_")}
 
     bad_opts = [x for x in opts if x not in conf_ptr]
     if bad_opts:
@@ -416,7 +414,7 @@ def list_all():
     """
     if "ports.list_all" not in __context__:
         __context__["ports.list_all"] = []
-        for path, dirs, files in salt.utils.path.os_walk("/usr/ports"):
+        for path, _dirs, _files in salt.utils.path.os_walk("/usr/ports"):
             stripped = path[len("/usr/ports") :]
             if stripped.count("/") != 2 or stripped.endswith("/CVS"):
                 continue
@@ -446,10 +444,9 @@ def search(name):
     if "/" in name:
         if name.count("/") > 1:
             raise SaltInvocationError(
-                "Invalid search string '{0}'. Port names cannot have more " "than one slash"
+                "Invalid search string '{0}'. Port names cannot have more than one slash"
             )
-        else:
-            return fnmatch.filter(all_ports, name)
+        return fnmatch.filter(all_ports, name)
     else:
         ret = []
         for port in all_ports:

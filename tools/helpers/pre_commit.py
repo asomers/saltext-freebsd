@@ -79,15 +79,13 @@ def run_pre_commit(venv, retries=2):
         git("add", "--intent-to-add", *untracked_files)
         with local.venv(venv):
             try:
-                local["python"]("-m", "pre_commit", "run", "--all-files")
+                local["python"]("-m", "pre_commit", "run")
             except ProcessExecutionError as err:
                 if retries_left > 0 and check_pre_commit_rerun(err.stdout):
                     return _run_pre_commit_loop(retries_left - 1)
                 raise
 
-    prompt.status(
-        "Running pre-commit hooks against all files. This can take a minute, please be patient"
-    )
+    prompt.status("Running pre-commit hooks. This can take a minute, please be patient")
 
     try:
         _run_pre_commit_loop(retries)

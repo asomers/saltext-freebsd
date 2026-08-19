@@ -63,15 +63,19 @@ repos:
         #files: ^tests/.*\.py$
         #args: [--silent, -E, fix_docstrings]
 
-  - repo: https://github.com/asottile/pyupgrade
-    rev: 75992aaa40730136014f34227e0135f63fc951b4  # v3.21.2
-    hooks:
-      - id: pyupgrade
-        name: Rewrite Code to be Py3.10+
-        args: [
-          --py310-plus,
-        ]
-        exclude: src/saltext/freebsd/version.py
+  # Disable this step because it breaks stuff!
+  # Allowing this step to run breaks the tests.  And even saltstack/salt hasn't
+  # made this change.  Clearly, it's not necessary to run on Python 3.10+,
+  # because without this step, the tests work on 3.12.
+  #- repo: https://github.com/asottile/pyupgrade
+    #rev: 75992aaa40730136014f34227e0135f63fc951b4  # v3.21.2
+    #hooks:
+      #- id: pyupgrade
+        #name: Rewrite Code to be Py3.10+
+        #args: [
+          #--py310-plus,
+        #]
+        #exclude: src/saltext/freebsd/version.py
 
   - repo: https://github.com/PyCQA/isort
     rev: a333737ed43df02b18e6c95477ea1b285b3de15a  # 8.0.1

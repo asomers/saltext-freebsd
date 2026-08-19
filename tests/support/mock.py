@@ -21,23 +21,23 @@ import fnmatch
 import sys
 
 # By these days, we should blowup if mock is not available
-from unittest import mock
+import mock  # pylint: disable=blacklisted-external-import
 
 # pylint: disable=no-name-in-module,no-member
-from unittest.mock import ANY
-from unittest.mock import DEFAULT
-from unittest.mock import FILTER_DIR
-from unittest.mock import AsyncMock
-from unittest.mock import MagicMock
-from unittest.mock import Mock
-from unittest.mock import NonCallableMagicMock
-from unittest.mock import NonCallableMock
-from unittest.mock import PropertyMock
-from unittest.mock import __version__
-from unittest.mock import call
-from unittest.mock import create_autospec
-from unittest.mock import patch
-from unittest.mock import sentinel
+from mock import ANY
+from mock import DEFAULT
+from mock import FILTER_DIR
+from mock import AsyncMock
+from mock import MagicMock
+from mock import Mock
+from mock import NonCallableMagicMock
+from mock import NonCallableMock
+from mock import PropertyMock
+from mock import __version__
+from mock import call
+from mock import create_autospec
+from mock import patch
+from mock import sentinel
 
 import salt.utils.stringutils
 

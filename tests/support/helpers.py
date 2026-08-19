@@ -36,8 +36,8 @@ import types
 import attr
 import pytest
 import pytestskipmarkers.utils.platform
-import salt.ext.tornado.ioloop
-import salt.ext.tornado.web
+import tornado.ioloop
+import tornado.web
 import salt.utils.files
 import salt.utils.platform
 import salt.utils.pycrypto
@@ -1368,7 +1368,7 @@ class Webserver:
 
         self.port = port
         self.wait = wait
-        self.handler = handler if handler is not None else salt.ext.tornado.web.StaticFileHandler
+        self.handler = handler if handler is not None else tornado.web.StaticFileHandler
         self.web_root = None
         self.ssl_opts = ssl_opts
 
@@ -1376,14 +1376,14 @@ class Webserver:
         """
         Threading target which stands up the tornado application
         """
-        self.ioloop = salt.ext.tornado.ioloop.IOLoop()
+        self.ioloop = tornado.ioloop.IOLoop()
         asyncio.set_event_loop(self.ioloop.asyncio_loop)
-        if self.handler == salt.ext.tornado.web.StaticFileHandler:
-            self.application = salt.ext.tornado.web.Application(
+        if self.handler == tornado.web.StaticFileHandler:
+            self.application = tornado.web.Application(
                 [(r"/(.*)", self.handler, {"path": self.root})]
             )
         else:
-            self.application = salt.ext.tornado.web.Application([(r"/(.*)", self.handler)])
+            self.application = tornado.web.Application([(r"/(.*)", self.handler)])
         self.application.listen(self.port, ssl_options=self.ssl_opts)
         self.ioloop.start()
 
@@ -1455,7 +1455,7 @@ class Webserver:
         self.stop()
 
 
-class SaveRequestsPostHandler(salt.ext.tornado.web.RequestHandler):
+class SaveRequestsPostHandler(tornado.web.RequestHandler):
     """
     Save all requests sent to the server.
     """
@@ -1475,7 +1475,7 @@ class SaveRequestsPostHandler(salt.ext.tornado.web.RequestHandler):
         raise NotImplementedError()
 
 
-class MirrorPostHandler(salt.ext.tornado.web.RequestHandler):
+class MirrorPostHandler(tornado.web.RequestHandler):
     """
     Mirror a POST body back to the client
     """

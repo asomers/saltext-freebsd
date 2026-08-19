@@ -132,6 +132,12 @@ def fetch(**kwargs):
 
     kwargs:
         Parameters of freebsd-update command.
+
+    CLI Example:
+
+     .. code-block:: bash
+
+         salt '*' freebsd_update.fetch
     """
     # fetch continues when no controlling terminal is present
     pre = ""
@@ -154,6 +160,12 @@ def install(**kwargs):
 
     kwargs:
         Parameters of freebsd-update command.
+
+    CLI Example:
+
+     .. code-block:: bash
+
+         salt '*' freebsd_update.install
     """
     return _wrapper("install", **kwargs)
 
@@ -167,6 +179,12 @@ def rollback(**kwargs):
 
     kwargs:
         Parameters of freebsd-update command.
+
+    CLI Example:
+
+     .. code-block:: bash
+
+         salt '*' freebsd_update.rollback
     """
     return _wrapper("rollback", **kwargs)
 
@@ -180,6 +198,12 @@ def update(**kwargs):
 
     kwargs:
         Parameters of freebsd-update command.
+
+    CLI Example:
+
+     .. code-block:: bash
+
+         salt '*' freebsd_update.update
     """
     stdout = {}
 
@@ -202,6 +226,12 @@ def ids(**kwargs):
 
     kwargs:
         Parameters of freebsd-update command.
+
+    CLI Example:
+
+     .. code-block:: bash
+
+         salt '*' freebsd_update.IDS
     """
     return _wrapper("IDS", **kwargs)
 
@@ -221,6 +251,12 @@ def upgrade(**kwargs):
 
     kwargs:
         Parameters of freebsd-update command.
+
+    CLI Example:
+
+     .. code-block:: bash
+
+         salt '*' freebsd_update.upgrade -r 16.0-RELEASE
     """
     msg = "freebsd-update upgrade not yet implemented."
     log.warning(msg)

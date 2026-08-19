@@ -32,7 +32,7 @@ jobs:
       - name: Install dependencies
         shell: freebsd {0}
         run: |
-          pkg install -y python3 databases/py-sqlite3 devel/py-maturin textproc/py-markupsafe uv devel/py-uv nox
+          pkg install -y python3 py312-sqlite3 py312-maturin py312-markupsafe uv py312-uv nox
 
       - name: Install Test Requirements
         shell: freebsd {0}

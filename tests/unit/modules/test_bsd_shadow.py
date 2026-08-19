@@ -100,15 +100,15 @@ class BSDShadowTest(TestCase, LoaderModuleMockMixin):
         """
         Test shadow.set_password
         """
-        PASSWORD = "$6$1jReqE6eU.b.fl0X$lzsxgaP6kgPyW0kxeDhAn0ySH08gn5A3At0NDHRFUSkk/6s4hCgE9OTpSsNs1Vcvws3zN0lEXkxCYeZoTVY4A1"
+        password = "$6$1jReqE6eU.b.fl0X$lzsxgaP6kgPyW0kxeDhAn0ySH08gn5A3At0NDHRFUSkk/6s4hCgE9OTpSsNs1Vcvws3zN0lEXkxCYeZoTVY4A1"
         info_mock = MagicMock(return_value="root:%s:0:0::0:0:Charlie &:/root:/bin/sh")
         usermod_mock = MagicMock(return_value=0)
         with patch.dict(shadow.__salt__, {"cmd.run_stdout": info_mock}):
             with patch.dict(shadow.__salt__, {"cmd.run": usermod_mock}):
-                shadow.set_password("root", PASSWORD)
+                shadow.set_password("root", password)
         usermod_mock.assert_called_once_with(
             ["pw", "user", "mod", "root", "-H", "0"],
-            stdin=PASSWORD,
+            stdin=password,
             output_loglevel="quiet",
             python_shell=False,
         )

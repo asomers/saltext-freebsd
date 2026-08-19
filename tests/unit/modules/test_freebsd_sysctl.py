@@ -5,7 +5,7 @@
 import pytest
 from salt.exceptions import CommandExecutionError
 
-import saltext.freebsd.modules.freebsd_sysctl as freebsd_sysctl
+from saltext.freebsd.modules import freebsd_sysctl
 from tests.support.helpers import dedent
 from tests.support.mock import MagicMock
 from tests.support.mock import mock_open
@@ -79,7 +79,7 @@ def test_persist_no_conf_failure():
         freebsd_sysctl.__salt__,
         {"cmd.run_stdout": mock_cmd, "cmd.run_all": mock_asn_cmd},
     ):
-        with patch("salt.utils.files.fopen", mock_open()) as m_open:
+        with patch("salt.utils.files.fopen", mock_open()) as _open:
             pytest.raises(
                 CommandExecutionError,
                 freebsd_sysctl.persist,

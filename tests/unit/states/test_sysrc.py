@@ -4,7 +4,7 @@
 
 import pytest
 
-import saltext.freebsd.states.sysrc as sysrc
+from saltext.freebsd.states import sysrc
 from tests.support.mock import MagicMock
 from tests.support.mock import patch
 

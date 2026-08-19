@@ -45,15 +45,23 @@ repos:
         files: ^src/saltext/freebsd/.*\.py$
         args: [--silent]
 
-  - repo: https://github.com/saltstack/salt-rewrite
-    # Automatically rewrite code with known rules
-    rev: 2401c0faef69b6b846c719d611bcfe358234d5d1  # 2.5.2
-    hooks:
-      - id: salt-rewrite
-        alias: rewrite-tests
-        name: Rewrite the test suite
-        files: ^tests/.*\.py$
-        args: [--silent, -E, fix_docstrings]
+  # Disable this step because it breaks stuff!
+  # This step rewrites some imports, like "tornado" to "salt.ext.tornado", with
+  # the result that the tests cannot run, because those imports are not found.
+  # The salt.ext.tornado package isn't on pypi.  It's just a module within the
+  # main saltstack/salt repo, which makes it unavailable to extension modules.
+  # I cannot find any justifiation for the rewrite, either.  The repo where it
+  # comes from doesn't even have a README.
+  # https://github.com/saltstack/salt-rewrite/blob/master/src/saltrewrite/imports/fix_tornado_imports.py
+  #- repo: https://github.com/saltstack/salt-rewrite
+    ## Automatically rewrite code with known rules
+    #rev: 2401c0faef69b6b846c719d611bcfe358234d5d1  # 2.5.2
+    #hooks:
+      #- id: salt-rewrite
+        #alias: rewrite-tests
+        #name: Rewrite the test suite
+        #files: ^tests/.*\.py$
+        #args: [--silent, -E, fix_docstrings]
 
   - repo: https://github.com/asottile/pyupgrade
     rev: 75992aaa40730136014f34227e0135f63fc951b4  # v3.21.2

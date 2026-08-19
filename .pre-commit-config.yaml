@@ -131,7 +131,7 @@ repos:
         name: Lint Tests
         language: python
         entry: nox -e lint-tests-pre-commit --
-        files: ^tests/.*\.py$
+        files: ^tests/(functional|integration|unit)/.*\.py$
         require_serial: true
         additional_dependencies:
           - nox==2026.4.10

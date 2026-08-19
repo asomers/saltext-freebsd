@@ -36,13 +36,13 @@ import types
 import attr
 import pytest
 import pytestskipmarkers.utils.platform
-import tornado.ioloop
-import tornado.web
 import salt.utils.files
 import salt.utils.platform
 import salt.utils.pycrypto
 import salt.utils.stringutils
 import salt.utils.versions
+import tornado.ioloop
+import tornado.web
 from pytestshellutils.exceptions import ProcessFailed
 from pytestshellutils.utils import ports
 from pytestshellutils.utils.processes import ProcessResult

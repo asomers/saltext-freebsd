@@ -4,7 +4,7 @@ Generally, extensions need to be installed into the same Python environment Salt
 
 :::{tab} State
 ```yaml
-Install Salt Freebsd extension:
+Install Salt FreeBSD extension:
   pip.installed:
     - name: saltext-freebsd
 ```

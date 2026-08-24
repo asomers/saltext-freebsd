@@ -1,5 +1,5 @@
 Thanks for your interest in contributing to the Salt Extension Modules for
-Freebsd! We welcome any contribution, large or small - from
+FreeBSD! We welcome any contribution, large or small - from
 adding a new feature to fixing a single letter typo.
 
 This is a companion to the Salt Project and the [Salt Contributing

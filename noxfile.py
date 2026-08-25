@@ -105,19 +105,13 @@ def _install_requirements(
             session.install(no_progress, COVERAGE_REQUIREMENT, silent=PIP_INSTALL_SILENT)
 
         if install_salt:
-            # Salt does not publish wheels and setuptools 75.6.0+ breaks requirements inclusion during builds,
-            # so we need to constrain setuptools in the build environment.
-            # We need delete=False for Windows. delete_on_close would work, but is Python 3.12+ only.
-            with tempfile.NamedTemporaryFile(delete=False) as constraints_file:
-                setuptools_constraint = "setuptools<75.6.0"
-                constraints_file.write(setuptools_constraint.encode())
+            # Use a constraints file to avoid incompatible builds (e.g. cryptography sdist on FreeBSD/Python 3.12)
+            # and to pin setuptools to a version compatible with Salt.
+            constraints_file = Path(__file__).parent / "requirements" / "constraints-ci.txt"
             env = {
-                "PIP_CONSTRAINT": constraints_file.name,
+                "PIP_CONSTRAINT": str(constraints_file),
             }
-            try:
-                session.install(no_progress, SALT_REQUIREMENT, silent=PIP_INSTALL_SILENT, env=env)
-            finally:
-                os.unlink(constraints_file.name)
+            session.install(no_progress, SALT_REQUIREMENT, silent=PIP_INSTALL_SILENT, env=env)
 
         if install_test_requirements:
             install_extras.append("tests")

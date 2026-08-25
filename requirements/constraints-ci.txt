@@ -1,0 +1,6 @@
+# Salt does not publish wheels and setuptools 75.6.0+ breaks requirements
+# inclusion during builds.
+setuptools<75.6.0
+# cryptography 50+ requires building from source (needs Rust/maturin) on
+# platforms without a prebuilt wheel (e.g. FreeBSD/Python 3.12 in CI).
+cryptography<50

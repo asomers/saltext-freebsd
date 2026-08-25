@@ -32,7 +32,7 @@ jobs:
       - name: Install dependencies
         shell: freebsd {0}
         run: |
-          pkg install -y python3 py312-cryptography py312-sqlite3 py312-maturin py312-markupsafe uv py312-uv py312-pyzmq nox rust
+          pkg install -y python3 py312-build py312-cryptography py312-sqlite3 py312-maturin py312-markupsafe py312-pyzmq py312-setuptools-scm py312-uv py312-wheel nox rust uv 
 
       - name: Install Test Requirements
         shell: freebsd {0}

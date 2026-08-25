@@ -1,4 +1,4 @@
-# Salt Extension for Freebsd
+# Salt Extension for FreeBSD
 
 Salt Extension for FreeBSD-specific commands
 
@@ -83,7 +83,7 @@ without writing code:
 You can also contribute by:
 
 * Writing blog posts
-* Sharing your experiences using Salt + Freebsd
+* Sharing your experiences using Salt + FreeBSD
   on social media
 * Giving talks at conferences
 * Publishing videos

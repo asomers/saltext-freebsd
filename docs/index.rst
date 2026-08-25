@@ -1,4 +1,4 @@
-``saltext-freebsd``: Integrate Salt with Freebsd
+``saltext-freebsd``: Integrate Salt with FreeBSD
 ================================================
 
 Salt Extension for FreeBSD-specific commands

@@ -116,6 +116,17 @@ def _install_requirements(
             }
             try:
                 session.install(no_progress, SALT_REQUIREMENT, silent=PIP_INSTALL_SILENT, env=env)
+                session.run(
+                    "python3",
+                    "-m",
+                    "pip",
+                    "install",
+                    no_progress,
+                    "--no-build-isolation",
+                    SALT_REQUIREMENT,
+                    env=env,
+                    silent=PIP_INSTALL_SILENT,
+                )
             finally:
                 os.unlink(constraints_file.name)
 
@@ -391,7 +402,7 @@ def lint_tests(session):
     _lint(session, ".pylintrc", flags, paths)
 
 
-@nox.session(python=False, name="lint-code-pre-commit")
+@nox.session(python=False, name="lint-code-pre-commit", venv_params=VENV_PARAMS)
 def lint_code_pre_commit(session):
     """
     Run PyLint against the code. Set PYLINT_REPORT to a path to capture output.
@@ -404,7 +415,7 @@ def lint_code_pre_commit(session):
     _lint_pre_commit(session, ".pylintrc", flags, paths)
 
 
-@nox.session(python=False, name="lint-tests-pre-commit")
+@nox.session(python=False, name="lint-tests-pre-commit", venv_params=VENV_PARAMS)
 def lint_tests_pre_commit(session):
     """
     Run PyLint against the code and the test suite. Set PYLINT_REPORT to a path to capture output.

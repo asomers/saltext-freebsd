@@ -27,7 +27,7 @@ jobs:
         uses: vmactions/freebsd-vm@v1
         with:
           release: ${{ matrix.osrelease }}
-          usessh: true
+          usesh: true
 
       - name: Install dependencies
         shell: freebsd {0}
@@ -42,6 +42,7 @@ jobs:
           nox --force-color -e tests-3 --install-only
 
       - name: Test
+        shell: freebsd {0}
         env:
           SALT_REQUIREMENT: salt==${{ matrix.salt-version }}
           SKIP_REQUIREMENTS_INSTALL: true

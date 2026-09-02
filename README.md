@@ -26,7 +26,7 @@ To get started contributing, first clone this repository (or your fork):
 
 ```bash
 # Clone the repo
-git clone --origin upstream git@github.com:salt-extensions/saltext-freebsd.git
+git clone --origin upstream git@github.com:asomers/saltext-freebsd.git
 
 # Change to the repo dir
 cd saltext-freebsd
@@ -83,8 +83,7 @@ without writing code:
 You can also contribute by:
 
 * Writing blog posts
-* Sharing your experiences using Salt + FreeBSD
-  on social media
+* Sharing your experiences using Salt + FreeBSD on social media
 * Giving talks at conferences
 * Publishing videos
 * Engaging in IRC, Discord or email groups
@@ -101,8 +100,8 @@ appreciate every contribution!
 [first-steps]: https://salt-extensions.github.io/salt-extension-copier/topics/creation.html#initialize-the-python-virtual-environment
 [submitting-pr]: https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/creating-a-pull-request-from-a-fork
 [direnv]: https://direnv.net
-[issues]: https://github.com/salt-extensions/saltext-freebsd/issues
-[PRs]: https://github.com/salt-extensions/saltext-freebsd/pulls
-[discussions]: https://github.com/salt-extensions/saltext-freebsd/discussions
+[issues]: https://github.com/asomers/saltext-freebsd/issues
+[PRs]: https://github.com/asomers/saltext-freebsd/pulls
+[discussions]: https://github.com/asomers/saltext-freebsd/discussions
 [comments]: https://conventionalcomments.org/
-[docs]: https://salt-extensions.github.io/saltext-freebsd/
+[docs]: https://asomers.github.io/saltext-freebsd/
